@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — Pablo Román Baro</title>
+<meta name="description" content="Contact Pablo Román Baro, cinematographer based in Madrid.">
+<meta property="og:site_name" content="Pablo Román Baro">
+<meta property="og:title" content="Pablo Román Baro — Cinematographer">
+<meta property="og:description" content="Cinematographer based in Madrid. Commercials, fashion films and music videos.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pabloromandop.com/">
+<meta property="og:image" content="https://pabloromandop.com/img/contact/pablo.jpg">
+<meta property="og:image:width" content="691">
+<meta property="og:image:height" content="844">
+<meta property="og:image:alt" content="Pablo Román Baro operating an ARRI camera on set">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pabloromandop.com/img/contact/pablo.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site-header">
+    <div class="brand">
+      <a class="brand-name" href="index.html">Pablo Román Baro</a>
+      <span class="brand-role">Cinematographer — Madrid</span>
+    </div>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html#work">Work</a>
+      <a href="contact.html" aria-current="page">Contact</a>
+    </nav>
+  </header>
+
+  <main class="contact-page">
+    <figure class="contact-photo">
+      <img src="img/contact/pablo.jpg" alt="Pablo Román Baro operating an ARRI camera on set" width="691" height="844">
+    </figure>
+
+    <div class="contact-info">
+      <h1>Contact</h1>
+
+      <div class="contact-item">
+        <span class="label">Email</span>
+        <a data-site="email" href="mailto:info.pabloroman98@gmail.com">info.pabloroman98@gmail.com</a>
+      </div>
+
+      <div class="contact-item">
+        <span class="label">Phone</span>
+        <a data-site="phone" href="tel:+34634439040">+34 634 439 040</a>
+      </div>
+
+      <div class="contact-item">
+        <span class="label">Follow</span>
+        <a data-site="instagram" href="https://www.instagram.com/pabloroman98/">Instagram</a>
+        <a data-site="vimeo" href="https://vimeo.com/pabloroman">Vimeo</a>
+      </div>
+
+      <div class="contact-item">
+        <span class="label">Based in</span>
+        <span data-site="basedIn">Madrid — available worldwide</span>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">© <span class="year">2026</span> Pablo Román Baro</footer>
+
+</div>
+<script src="js/projects.js"></script>
+<script>
+  (function () {
+    var site = window.SITE || {};
+    document.querySelectorAll("[data-site]").forEach(function (el) {
+      var k = el.getAttribute("data-site");
+      if (!site[k]) return;
+      if (k === "email") { el.href = "mailto:" + site.email; el.textContent = site.email; }
+      else if (k === "phone") { el.href = "tel:" + site.phone.replace(/\s+/g, ""); el.textContent = site.phone; }
+      else if (k === "basedIn") { el.textContent = site.basedIn; }
+      else { el.href = site[k]; }
+    });
+    document.querySelectorAll(".year").forEach(function (el) { el.textContent = new Date().getFullYear(); });
+  })();
+</script>
+</body>
+</html>

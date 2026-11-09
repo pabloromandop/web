@@ -1,0 +1,98 @@
+(function () {
+  var projects = window.PROJECTS || [];
+  var site = window.SITE || {};
+  var grid = document.querySelector(".grid");
+  var filters = document.querySelector(".filters");
+  var order = ["Commercial", "Fashion", "Narrative", "Music"];
+  var current = "All";
+
+  // Datos de contacto desde projects.js
+  document.querySelectorAll("[data-site]").forEach(function (a) {
+    var k = a.getAttribute("data-site");
+    if (k === "email" && site.email) { a.href = "mailto:" + site.email; a.textContent = site.email; }
+    else if (site[k]) { a.href = site[k]; }
+  });
+  document.querySelectorAll(".year").forEach(function (el) { el.textContent = new Date().getFullYear(); });
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  function caption(p) {
+    var t = p.title;
+    if (p.artist) t += " — " + p.artist;
+    if (p.director) t += " — Dir. " + p.director;
+    return t;
+  }
+
+  function renderFilters() {
+    var cats = ["All"].concat(order.filter(function (c) {
+      return projects.some(function (p) { return p.category === c; });
+    }));
+    filters.innerHTML = cats.map(function (c) {
+      return '<button type="button" aria-pressed="' + (c === current) + '" data-cat="' + c + '">' + c + "</button>";
+    }).join("");
+  }
+
+  function renderGrid() {
+    var list = current === "All" ? projects : projects.filter(function (p) { return p.category === current; });
+    grid.innerHTML = list.map(function (p) {
+      var src = "img/" + p.slug + "/" + p.cover + ".jpg";
+      return (
+        '<a class="card" href="project.html?p=' + p.slug + '">' +
+          '<div class="still">' +
+            '<img class="base" src="' + src + '" alt="' + esc(p.title) + '" loading="lazy">' +
+            '<img class="lens" src="' + src + '" alt="" aria-hidden="true" loading="lazy">' +
+            '<div class="cap"><span>' + esc(caption(p)) + "</span></div>" +
+          "</div>" +
+        "</a>"
+      );
+    }).join("");
+    focusOnScroll();
+  }
+
+  filters.addEventListener("click", function (e) {
+    var b = e.target.closest("button");
+    if (!b) return;
+    current = b.getAttribute("data-cat");
+    renderFilters();
+    renderGrid();
+  });
+
+  // Ordenador: el círculo nítido sigue al cursor
+  grid.addEventListener("mousemove", function (e) {
+    var still = e.target.closest(".still");
+    if (!still) return;
+    var r = still.getBoundingClientRect();
+    still.style.setProperty("--mx", (e.clientX - r.left) + "px");
+    still.style.setProperty("--my", (e.clientY - r.top) + "px");
+  });
+
+  // Móvil: la imagen que cruza el centro de la pantalla queda nítida;
+  // las demás se desenfocan según se alejan.
+  var touch = window.matchMedia && window.matchMedia("(hover: none)").matches;
+  var raf = null;
+  function focusOnScroll() {
+    if (!touch || raf) return;
+    raf = requestAnimationFrame(function () {
+      raf = null;
+      var h = window.innerHeight || 800;
+      var c = h / 2;
+      grid.querySelectorAll(".card").forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        var d = Math.max(0, r.top - c, c - r.bottom) / c;
+        var t = Math.min(1, d / 0.45);
+        el.style.setProperty("--b", (t * 4).toFixed(2) + "px");
+      });
+    });
+  }
+  if (touch) {
+    window.addEventListener("scroll", focusOnScroll, { passive: true });
+    window.addEventListener("resize", focusOnScroll);
+  }
+
+  renderFilters();
+  renderGrid();
+})();
