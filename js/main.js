@@ -50,6 +50,7 @@
         "</a>"
       );
     }).join("");
+    padBottom();
     focusOnScroll();
   }
 
@@ -84,18 +85,7 @@
       raf = null;
       var h = window.innerHeight || 800;
       var c = h / 2;
-      // Al llegar al final de la página la última imagen no puede subir
-      // hasta el centro: el punto de enfoque baja para ir a buscarla.
       var cards = grid.querySelectorAll(".card");
-      var last = cards[cards.length - 1];
-      if (last) {
-        var doc = document.documentElement;
-        var remaining = Math.max(0, doc.scrollHeight - h - window.scrollY);
-        var lr = last.getBoundingClientRect();
-        var lastEnd = lr.top + lr.height / 2 + remaining; // su centro al final del scroll
-        var deficit = lastEnd - h / 2;
-        if (deficit > 0 && remaining < deficit) c = lastEnd - remaining;
-      }
       cards.forEach(function (el) {
         var r = el.getBoundingClientRect();
         var d = Math.max(0, r.top - c, c - r.bottom) / c;
@@ -106,9 +96,29 @@
       });
     });
   }
+  // Móvil: espacio extra al final para que la última imagen
+  // también pueda llegar al centro de la pantalla.
+  function padBottom() {
+    if (!touch) return;
+    grid.style.marginBottom = "";
+    var cards = grid.querySelectorAll(".card");
+    var last = cards[cards.length - 1];
+    if (!last) return;
+    var h = window.innerHeight || 800;
+    var r = last.getBoundingClientRect();
+    var below = document.documentElement.scrollHeight - (r.bottom + window.scrollY);
+    var extra = h / 2 - r.height / 2 - below;
+    if (extra > 0) grid.style.marginBottom = Math.ceil(extra) + "px";
+  }
   if (touch) {
     window.addEventListener("scroll", focusOnScroll, { passive: true });
-    window.addEventListener("resize", focusOnScroll);
+    // Solo se recalcula si cambia el ancho (al girar el móvil), no cuando
+    // aparece o desaparece la barra del navegador, para evitar saltos.
+    var lastW = window.innerWidth;
+    window.addEventListener("resize", function () {
+      if (window.innerWidth !== lastW) { lastW = window.innerWidth; padBottom(); }
+      focusOnScroll();
+    });
   }
 
   renderFilters();
