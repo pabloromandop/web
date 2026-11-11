@@ -91,11 +91,12 @@ img { display: block; max-width: 100%; }
   height: 100%;
   object-fit: cover;
   transform: scale(1.06);
+  transition: transform 1.2s cubic-bezier(.25,.1,.25,1);
 }
 .lens {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 1.2s cubic-bezier(.25,.1,.25,1);
+  transition: opacity 1.2s cubic-bezier(.25,.1,.25,1), transform 1.2s cubic-bezier(.25,.1,.25,1);
   -webkit-mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), #000 0, #000 80px, rgba(0,0,0,.55) 160px, transparent 280px);
           mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), #000 0, #000 80px, rgba(0,0,0,.55) 160px, transparent 280px);
 }
@@ -122,11 +123,15 @@ img { display: block; max-width: 100%; }
   .card .base { filter: blur(4px); }
   .card:hover .lens, .card:focus-visible .lens { opacity: 1; }
   .card:hover .cap, .card:focus-visible .cap { opacity: 1; }
+  /* Zoom suave al pasar el cursor (el 1.12 marca la intensidad) */
+  .card:hover .still img, .card:focus-visible .still img { transform: scale(1.12); }
 }
-/* Móvil: el enfoque lo controla js/main.js según el scroll; sin títulos */
+/* Móvil: el enfoque lo controla js/main.js según el scroll;
+   la imagen que cruza el centro muestra su título */
 @media (hover: none) {
-  .lens, .cap { display: none; }
+  .lens { display: none; }
   .card .base { filter: blur(var(--b, 4px)); transition: filter .2s linear; }
+  .cap { opacity: var(--o, 0); transition: opacity .35s ease; }
 }
 @media (prefers-reduced-motion: reduce) {
   .lens, .cap, .card .base { transition: none; }

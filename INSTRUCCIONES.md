@@ -59,6 +59,7 @@ Para **quitar** un proyecto, borra su entrada en `projects.js` (y su carpeta de 
 - **Créditos de un proyecto:** en su lista `credits`. Cada línea es `["Etiqueta", "Nombre"]`.
 - **Diseño (colores, tamaños, efectos):** en `css/style.css`. Los colores están arriba del todo, en `:root`.
 - **Intensidad del desenfoque:** busca `blur(4px)` en `css/style.css` y el `4` en `js/main.js`.
+- **Intensidad del zoom al pasar el cursor:** el `scale(1.12)` de `.card:hover .still img` en `css/style.css` (la imagen en reposo está a `1.06`).
 - **Tamaño del círculo del cursor:** los valores `80px`, `160px` y `280px` de `.lens` en `css/style.css`.
 
 ## Publicar en Netlify
@@ -82,6 +83,6 @@ Para **quitar** un proyecto, borra su entrada en `projects.js` (y su carpeta de 
 
 ## Comportamiento de la web (para tener en cuenta al modificarla)
 
-- **Ordenador:** portadas desenfocadas; al pasar el cursor aparece un círculo nítido que lo sigue, la imagen se oscurece un poco y aparece el título centrado.
-- **Móvil:** sin títulos sobre las portadas; la imagen que cruza el centro de la pantalla se ve nítida y las demás se desenfocan según se alejan.
+- **Ordenador:** portadas desenfocadas; al pasar el cursor la imagen hace un zoom suave, aparece un círculo nítido que sigue al cursor, la imagen se oscurece un poco y aparece el título centrado.
+- **Móvil:** la imagen que cruza el centro de la pantalla se ve nítida, se oscurece un poco y muestra su título; las demás se desenfocan según se alejan.
 - **Páginas de proyecto:** en ordenador, flechas izquierda/derecha sobre el vídeo (o las del teclado) para ir al anterior o siguiente. En móvil no hay flechas: se cambia de proyecto deslizando el dedo a izquierda o derecha. La navegación es circular.

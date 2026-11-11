@@ -65,9 +65,13 @@
   grid.addEventListener("mousemove", function (e) {
     var still = e.target.closest(".still");
     if (!still) return;
-    var r = still.getBoundingClientRect();
-    still.style.setProperty("--mx", (e.clientX - r.left) + "px");
-    still.style.setProperty("--my", (e.clientY - r.top) + "px");
+    // Se mide sobre la imagen ya ampliada para que el círculo
+    // siga exactamente al cursor también durante el zoom.
+    var img = still.querySelector(".lens") || still;
+    var r = img.getBoundingClientRect();
+    var w = img.offsetWidth || r.width, h = img.offsetHeight || r.height;
+    still.style.setProperty("--mx", ((e.clientX - r.left) * w / r.width) + "px");
+    still.style.setProperty("--my", ((e.clientY - r.top) * h / r.height) + "px");
   });
 
   // Móvil: la imagen que cruza el centro de la pantalla queda nítida;
@@ -85,6 +89,8 @@
         var d = Math.max(0, r.top - c, c - r.bottom) / c;
         var t = Math.min(1, d / 0.45);
         el.style.setProperty("--b", (t * 4).toFixed(2) + "px");
+        // Título visible solo en la imagen que está en el centro
+        el.style.setProperty("--o", Math.max(0, 1 - t * 4).toFixed(2));
       });
     });
   }
